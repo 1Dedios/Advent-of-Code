@@ -10,8 +10,25 @@ for await (const line of file.readLines()) {
   colOneArray.push(parseInt(lineArray[0]))
   colTwoArray.push(parseInt(lineArray[1]))
 }
-console.log(colOneArray.length === colTwoArray.length)
 
-// each array has their corresponding numbers
-// remove the min num from each array and subtract - convert difference to absolute value and aggregate in one array
-// aggregated array should be summed and that should be the answer for the first day's challenge
+let colOneArrayCopy = [...colOneArray]
+let colTwoArrayCopy = [...colTwoArray]
+let aggregateArray = [];
+
+let lenOfArrays = colOneArrayCopy.length
+
+while (lenOfArrays > 0) {
+  let colOneMin = Math.min(...colOneArrayCopy)
+  let colTwoMin = Math.min(...colTwoArrayCopy)
+  let indexOfColOneMin = colOneArrayCopy.indexOf(colOneMin);
+  let indexOfColTwoMin = colTwoArrayCopy.indexOf(colTwoMin)
+  
+  colOneArrayCopy.splice(indexOfColOneMin, 1);
+  colTwoArrayCopy.splice(indexOfColTwoMin, 1);
+
+  let distance = Math.abs(colOneMin - colTwoMin)
+  aggregateArray.push(distance)
+  lenOfArrays -= 1
+}
+
+console.log(aggregateArray.reduce((acc, val) => acc + val, 0))
