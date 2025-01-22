@@ -21,11 +21,11 @@ while (lenOfArrays > 0) {
   let colTwoMin = Math.min(...colTwoArrayCopy)
   let indexOfColOneMin = colOneArrayCopy.indexOf(colOneMin);
   let indexOfColTwoMin = colTwoArrayCopy.indexOf(colTwoMin)
+  let distance = Math.abs(colOneMin - colTwoMin)
   
   colOneArrayCopy.splice(indexOfColOneMin, 1);
   colTwoArrayCopy.splice(indexOfColTwoMin, 1);
 
-  let distance = Math.abs(colOneMin - colTwoMin)
   aggregateArray.push(distance)
   lenOfArrays -= 1
 }
@@ -40,18 +40,19 @@ console.log('PART 1: ANSWER - ', aggregateArray.reduce((acc, val) => acc + val, 
 
 let colOneArrayCopy1 = [...colOneArray]
 let colTwoArrayCopy1 = [...colTwoArray]
+let similarityScores = [];
 let freqObj = {}
 
-for (let i = 0; i < colOneArrayCopy1.length; i++) {
-  freqObj[colOneArrayCopy1[i]] = 0
+for (const num of colOneArrayCopy1) {
+  freqObj[num] = 0
 }
 
-for (let i = 0; i < colTwoArrayCopy1.length; i++) {
-  if (freqObj.hasOwnProperty(colTwoArrayCopy1[i])) {
-    if (freqObj[colTwoArrayCopy1[i]] > 0) {
-      freqObj[colTwoArrayCopy1[i]] += 1
+for (const num of colTwoArrayCopy1) {
+  if (freqObj.hasOwnProperty(num)) {
+    if (freqObj[num] > 0) {
+      freqObj[num] += 1
     } else {
-      freqObj[colTwoArrayCopy1[i]] = 1
+      freqObj[num] = 1
     }
   }
 }
@@ -59,13 +60,9 @@ for (let i = 0; i < colTwoArrayCopy1.length; i++) {
 for (const key in freqObj) {
   if (freqObj[key] == 0) {
     delete freqObj[key]
+  } else {
+      similarityScores.push(parseInt(key) * freqObj[key])
   }
-}
-
-let similarityScores = [];
-
-for (const key in freqObj) {
-  similarityScores.push(parseInt(key) * freqObj[key])
 }
 
 console.log('PART 2: ANSWER - ', similarityScores.reduce((acc, val) => acc + val, 0))
