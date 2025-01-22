@@ -14,7 +14,6 @@ for await (const line of file.readLines()) {
 let colOneArrayCopy = [...colOneArray]
 let colTwoArrayCopy = [...colTwoArray]
 let aggregateArray = [];
-
 let lenOfArrays = colOneArrayCopy.length
 
 while (lenOfArrays > 0) {
@@ -31,7 +30,7 @@ while (lenOfArrays > 0) {
   lenOfArrays -= 1
 }
 
-console.log(aggregateArray.reduce((acc, val) => acc + val, 0))
+//console.log('PART 1 - ANSWER', aggregateArray.reduce((acc, val) => acc + val, 0))
 
 /** 
  * 
@@ -39,16 +38,34 @@ console.log(aggregateArray.reduce((acc, val) => acc + val, 0))
  * 
  */
 
-// need to create key, val pairs - key=colOneArrayCopy elements, val=how often it appears in colTwoArrayCopy
+let colOneArrayCopy1 = [...colOneArray]
+let colTwoArrayCopy1 = [...colTwoArray]
+let freqObj = {}
 
-// iterate colOneArrayCopy and make element the key and 0 as val
+for (let i = 0; i < colOneArrayCopy1.length; i++) {
+  freqObj[colOneArrayCopy1[i]] = 0
+}
 
-// iterate colTwoArrayCopy - if element a key in the object - if val > 0 increase val by one else change val to 1
+for (let i = 0; i < colTwoArrayCopy1.length; i++) {
+  if (freqObj.hasOwnProperty(colTwoArrayCopy1[i])) {
+    if (freqObj[colTwoArrayCopy1[i]] > 0) {
+      freqObj[colTwoArrayCopy1[i]] += 1
+    } else {
+      freqObj[colTwoArrayCopy1[i]] = 1
+    }
+  }
+}
 
-// create arrays from keys and values
+for (const key in freqObj) {
+  if (freqObj[key] == 0) {
+    delete freqObj[key]
+  }
+}
 
-// create similarity array - empty 
+let similarityScores = [];
 
-// iterate through keys - take keys and multiply by val array element and push resulting value to similarity array
+for (const key in freqObj) {
+  similarityScores.push(parseInt(key) * freqObj[key])
+}
 
-// reduce function on similarity array should be the answer
+console.log('Part 2 Answer - ', similarityScores.reduce((acc, val) => acc + val, 0))
