@@ -1,5 +1,11 @@
 import { open } from 'node:fs/promises';
 
+/** 
+ * 
+ * PART 1
+ * 
+ */
+
 const file = await open('./input.txt');
 
 let colOneArray = [];
