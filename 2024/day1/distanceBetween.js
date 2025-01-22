@@ -30,7 +30,7 @@ while (lenOfArrays > 0) {
   lenOfArrays -= 1
 }
 
-//console.log('PART 1 - ANSWER', aggregateArray.reduce((acc, val) => acc + val, 0))
+console.log('PART 1: ANSWER - ', aggregateArray.reduce((acc, val) => acc + val, 0))
 
 /** 
  * 
@@ -68,4 +68,4 @@ for (const key in freqObj) {
   similarityScores.push(parseInt(key) * freqObj[key])
 }
 
-console.log('Part 2 Answer - ', similarityScores.reduce((acc, val) => acc + val, 0))
+console.log('PART 2: ANSWER - ', similarityScores.reduce((acc, val) => acc + val, 0))
