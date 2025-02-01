@@ -45,8 +45,14 @@ for (const reportCell of cleanReports) {
         : (increasing = true);
 
       // depending on the flag set then the report levels ALL should be following the flag if it deviates then report UNSAFE (move to next)
-      // now we can start going through the levels with a fixed window size of 2
+      // now we can start going through the levels with a fixed window size of 2 - start from index after 1st window
       // if the levels in this new window don't differ by a difference > 3 - and also adhere to the flag - still safe
+      // REMEMBER - each report has differing # of levels
+
+      // after going through all levels and adhering to the condition for safe report we can increase safeReport count
+      // safeReport += 1
     }
   }
 }
+
+// console.log("# of Safe Reports = ", safeReport)
