@@ -39,20 +39,59 @@ for (const reportCell of cleanReports) {
     } else {
       let increasing = false;
       let decreasing = false;
+      let safeFlag = false;
 
       reportCell[i] > reportCell[i++]
         ? (decreasing = true)
         : (increasing = true);
 
-      // depending on the flag set then the report levels ALL should be following the flag if it deviates then report UNSAFE (move to next)
-      // now we can start going through the levels with a fixed window size of 2 - start from index after 1st window
-      // if the levels in this new window don't differ by a difference > 3 - and also adhere to the flag - still safe
-      // REMEMBER - each report has differing # of levels
-
+      if (increasing === true) {
+        // depending on the flag set then the report levels ALL should be following the flag if it deviates then report UNSAFE (move to next)
+        // now we can start going through the levels with a fixed window size of 2 - start from index after 1st window
+        for (let j = 2; j < reportCell.length; j++) {
+          // if the levels in this new window don't differ by a difference > 3 - and also adhere to the flag - still safe
+          // REMEMBER - each report has differing # of levels
+          if (
+            Math.abs(
+              parseInt(reportCell[j], 10) - parseInt(reportCell[j++], 10)
+            ) > 3 &&
+            parseInt(reportCell[j], 10) > parseInt(reportCell[j++], 10)
+          ) {
+            // set the safeFlag and continue
+            safeFlag = true;
+            continue;
+          } else {
+            // 1 or both conditions failed for safeReport so we break the loop
+            safeFlag = false;
+            break;
+          }
+        }
+      } else {
+        for (let j = 2; j < reportCell.length; j++) {
+          // if the levels in this new window don't differ by a difference > 3 - and also adhere to the flag - still safe
+          // REMEMBER - each report has differing # of levels
+          if (
+            Math.abs(
+              parseInt(reportCell[j], 10) - parseInt(reportCell[j++], 10)
+            ) > 3 &&
+            parseInt(reportCell[j], 10) < parseInt(reportCell[j++], 10)
+          ) {
+            // set the safeFlag and continue
+            safeFlag = true;
+            continue;
+          } else {
+            // 1 or both conditions failed for safeReport so we break the loop
+            safeFlag = false;
+            break;
+          }
+        }
+      }
       // after going through all levels and adhering to the condition for safe report we can increase safeReport count
       // safeReport += 1
+      if (safeFlag === true) safeReports += 1;
     }
   }
 }
 
 // console.log("# of Safe Reports = ", safeReport)
+console.log('# of Safe Reports = ', safeReports);
