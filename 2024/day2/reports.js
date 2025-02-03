@@ -6,7 +6,6 @@ let cleanReports = [];
 let safeReports = 0;
 
 for await (const report of logsFile.readLines()) {
-  // report returns strings
   reportAggregator.push(report);
 }
 
@@ -14,84 +13,99 @@ for (const report of reportAggregator) {
   cleanReports.push(report.split(' '));
 }
 
-// clean report array should now be a 2D array
-console.log(cleanReports);
-
 /**
  *
  * WHAT IS A SAFE REPORT?
  *
  * - all levels are increasing or decreasing
- * - any 2 adjacent levels differ by at least one or at most three
+ * - any 2 adjacent levels 1 >= DIFF <= 3
  */
-// extract the number of reports that are considered "safe" and return that number that's the answer to part 1
-// each col of a report represents a level
-// iterate through clean reports levels w/ a fixed window size of 2 from the current element if it qualifies for safe report increase safeReport VAR #
 
 for (const reportCell of cleanReports) {
-  // going through each report and below iterating through each level/element
-  for (let i = 0; i < reportCell.length; i++) {
-    // compare the first level to the next level if there is a difference bigger than 3 then continue - DISQUALIFIED
-    if (
-      Math.abs(parseInt(reportCell[i], 10) - parseInt(reportCell[i++], 10)) > 3
-    ) {
-      continue;
-    } else {
-      let increasing = false;
-      let decreasing = false;
-      let safeFlag = false;
+  if (
+    Math.abs(parseInt(reportCell[0], 10) - parseInt(reportCell[1], 10)) > 3 ||
+    Math.abs(parseInt(reportCell[0], 10) - parseInt(reportCell[1], 10)) === 0
+  ) {
+    continue;
+  } else {
+    // STATUS: WE ARE SUCCESSFULLY FILTERING REPORTS WITH A DIFF < 3 and with at least a DIFF of at least 1
+    let increasing = false;
+    let decreasing = false;
+    let safeFlag;
 
-      reportCell[i] > reportCell[i++]
-        ? (decreasing = true)
-        : (increasing = true);
+    parseInt(reportCell[0], 10) > parseInt(reportCell[1], 10)
+      ? (decreasing = true)
+      : (increasing = true);
 
-      if (increasing === true) {
-        // depending on the flag set then the report levels ALL should be following the flag if it deviates then report UNSAFE (move to next)
-        // now we can start going through the levels with a fixed window size of 2 - start from index after 1st window
-        for (let j = 2; j < reportCell.length; j++) {
-          // if the levels in this new window don't differ by a difference > 3 - and also adhere to the flag - still safe
-          // REMEMBER - each report has differing # of levels
-          if (
-            Math.abs(
-              parseInt(reportCell[j], 10) - parseInt(reportCell[j++], 10)
-            ) > 3 &&
-            parseInt(reportCell[j], 10) > parseInt(reportCell[j++], 10)
-          ) {
-            // set the safeFlag and continue
-            safeFlag = true;
-            continue;
-          } else {
-            // 1 or both conditions failed for safeReport so we break the loop
-            safeFlag = false;
-            break;
-          }
-        }
-      } else {
-        for (let j = 2; j < reportCell.length; j++) {
-          // if the levels in this new window don't differ by a difference > 3 - and also adhere to the flag - still safe
-          // REMEMBER - each report has differing # of levels
-          if (
-            Math.abs(
-              parseInt(reportCell[j], 10) - parseInt(reportCell[j++], 10)
-            ) > 3 &&
-            parseInt(reportCell[j], 10) < parseInt(reportCell[j++], 10)
-          ) {
-            // set the safeFlag and continue
-            safeFlag = true;
-            continue;
-          } else {
-            // 1 or both conditions failed for safeReport so we break the loop
-            safeFlag = false;
-            break;
-          }
-        }
+    // STATUS: WE HAVE ESTABLISHED IF THE LEVELS ARE INCREASING OR DECREASING
+    console.log('true or false outcome: ', increasing === true ? true : false);
+
+    if (increasing === true) {
+      for (let i = 2; i < reportCell.length; i++) {
+        console.log(
+          "WE'RE GOING TO CHECK THIS INCREASING REPORT MORE THOROUGHLY: ",
+          reportCell
+        );
+        console.log(
+          'WINDOW AFTER INITIAL CONDITION (INCREASING): ',
+          parseInt(reportCell[i], 10),
+          parseInt(reportCell[++i], 10)
+        );
+        console.log(
+          'first condition (diff <= 3): ',
+          Math.abs(
+            parseInt(reportCell[i], 10) - parseInt(reportCell[++i], 10)
+          ) <= 3
+        );
+        console.log(
+          'second condition (diff >= 1): ',
+          Math.abs(
+            parseInt(reportCell[i], 10) - parseInt(reportCell[++i], 10)
+          ) >= 1
+        );
+        console.log(
+          'third condition (curr < next): ',
+          parseInt(reportCell[i], 10) < parseInt(reportCell[++i], 10)
+        );
+
+        // STATUS: IMPLEMENTING CONDITIONALS FOR THE safeFlag - INCREASING LEVELS
       }
-      // after going through all levels and adhering to the condition for safe report we can increase safeReport count
-      // safeReport += 1
-      if (safeFlag === true) safeReports += 1;
+      // IF SAFEFLAG === TRUE - ADD 1 TO SAFEREPORTS
+    } else {
+      for (let i = 2; i < reportCell.length; i++) {
+        console.log(
+          "WE'RE GOING TO CHECK THIS DECREASING REPORT MORE THOROUGHLY: ",
+          reportCell
+        );
+        console.log(
+          'WINDOW AFTER INITIAL CONDITION (DECREASING): ',
+          parseInt(reportCell[i], 10),
+          parseInt(reportCell[++i], 10)
+        );
+        console.log(
+          'first condition (diff <= 3): ',
+          Math.abs(
+            parseInt(reportCell[i], 10) - parseInt(reportCell[++i], 10)
+          ) <= 3
+        );
+        console.log(
+          'second condition (diff >= 1): ',
+          Math.abs(
+            parseInt(reportCell[i], 10) - parseInt(reportCell[++i], 10)
+          ) >= 1
+        );
+        console.log(
+          'third condition (curr > next): ',
+          parseInt(reportCell[i], 10) < parseInt(reportCell[++i], 10)
+        );
+
+        // STATUS: IMPLEMENTING CONDITIONALS FOR THE safeFlag - DECREASING LEVELS
+      }
+
+      // IF SAFEFLAG === TRUE - ADD 1 TO SAFEREPORTS
     }
   }
 }
 
-// console.log("# of Safe Reports = ", safeReport)
-console.log('# of Safe Reports = ', safeReports);
+// console.log("# of Safe Reports = ", safeReports)
+// 500 - attempt for next
